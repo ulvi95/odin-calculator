@@ -39,3 +39,12 @@ button
     width: 200px;
     height: 100px;
 }
+
+.message
+{
+    margin-top: 20px;
+    font-size: 24px;
+    font-family: 'Courier New', Courier, monospace;
+    color: red;
+    font-weight: 1000;
+}
