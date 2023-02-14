@@ -56,7 +56,11 @@ deleteButton.addEventListener("click", () => {
 let equalButton = document.querySelector(".equal");
 
 equalButton.addEventListener("click", () => {
-    if (hasSet && operatorToCalculate === null) {
+    if (operatorToCalculate === null) {
+        return;
+    }
+    if(hasSet)
+    {
         return;
     }
     operand2 = value.textContent;
