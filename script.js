@@ -1,7 +1,10 @@
 let value = document.querySelector(".value");
 let operand1 = null;
+let operand2 = null;
 let operatorToCalculate = null;
 let hasSet = true;
+let hasDot = false;
+let isNeg = false;
 let message = document.querySelector(".message");
 
 let digitsButton = document.querySelectorAll(".digits");
@@ -30,6 +33,7 @@ clearButton.addEventListener("click", () => {
     operand1 = null;
     operatorToCalculate = null;
     hasSet = true;
+    hasDot = false;
     message.textContent = "";
 });
 
@@ -44,6 +48,10 @@ deleteButton.addEventListener("click", () => {
                 hasSet=true;
             } else {
                 value.textContent = value.textContent.slice(0, value.textContent.length - 1);
+                if(!value.textContent.includes("."))
+                {
+                    hasDot = false;
+                }
             }
         }
     }
@@ -52,40 +60,52 @@ deleteButton.addEventListener("click", () => {
 let equalButton = document.querySelector(".equal");
 
 equalButton.addEventListener("click", () => {
-    if (operand1 !== null && operatorToCalculate !== null) {
-        operand1 = operate(operand1, value.textContent, operatorToCalculate);
-        value.textContent = operand1;
-        
-        hasSet = true;
-        operatorToCalculate = null;
+    if(hasSet && operatorToCalculate === null)
+    {
+        return;
     }
-    console.log(operand1);
-});
+        operand2=value.textContent;
+        value.textContent = clearLastDot(value.textContent);
+        value.textContent = operate(operand1, value.textContent, operatorToCalculate);
+        
+
+        operatorToCalculate = null;
+        hasSet = true;
+    }
+);
 
 let operatorsButton = document.querySelectorAll(".operators");
 
 operatorsButton.forEach(
     (operator) => {
         operator.addEventListener("click", () => {
-            if (operand1 === null) {
-                operand1 = value.textContent;
-                operatorToCalculate = operator.textContent;
-                console.log("Operand 1: " + operand1);
-                console.log("Operator: " + operatorToCalculate);
-            } else if(operatorToCalculate!==null)
-                {
-                operand1 = operate(operand1, value.textContent, operatorToCalculate);
-                operatorToCalculate = operator.textContent;
-                console.log("Operand 1: " + operand1);
-                console.log("Operator: " + operatorToCalculate);
-                value.textContent = operand1;
-                }
-            
+            if (operatorToCalculate !== null)
+            {
+                equalButton.click();
+            }
+            value.textContent = clearLastDot(value.textContent);
+            value.textContent = (Number(value.textContent) * 1).toString();
+            operand1 = value.textContent;
+            operatorToCalculate = operator.textContent;
             hasSet = true;
 
         })
     }
 );
+
+
+function clearLastDot(operand1)
+{
+    if(operand1[operand1.length-1]===".")
+    {
+        return operand1.slice(0, operand1.length-1);
+    }
+    else
+    {
+        return operand1.slice(0, operand1.length);
+    }
+}
+
 
 function operate(operand1, operand2, operator) {
 
@@ -121,3 +141,48 @@ function operate(operand1, operand2, operator) {
         return parser(result);
     }
 }
+
+let dotButton = document.querySelector(".dot");
+
+dotButton.addEventListener("click", () =>
+{
+    if(!hasDot)
+    {
+        if(value.textContent.length <= 13)
+        {
+            value.textContent+= ".";
+        }
+        else
+        {
+            message.textContent = "Maximum number of allowed digits is 14";
+        }
+        hasDot = true;
+        hasSet = false;
+    }
+});
+
+signButton = document.querySelector(".sign");
+
+signButton.addEventListener("click", () =>
+{
+    if(isNeg)
+    {
+        value.textContent = value.textContent.slice(1, value.textContent.length);
+        isNeg = false;
+    }
+    else
+    {
+        if(value.textContent.length === 14)
+        {
+            message.textContent = "Maximum number of allowed symbols is 14";
+        }
+        else
+        {
+            if(value.textContent!=="0")
+            {
+                value.textContent = "-" + value.textContent;
+                isNeg = true;
+            }
+        }
+    }
+});
