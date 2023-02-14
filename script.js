@@ -11,16 +11,14 @@ let digitsButton = document.querySelectorAll(".digits");
 
 digitsButton.forEach((digit) => {
     digit.addEventListener("click", () => {
-        if (hasSet || value.textContent==="0") {
+        if (hasSet || value.textContent === "0") {
             value.textContent = digit.textContent;
             hasSet = false;
             message.textContent = "";
         } else if (value.textContent.length <= 14) {
             value.textContent += digit.textContent;
             message.textContent = "";
-        }
-        else
-        {
+        } else {
             message.textContent = "Maximum number of allowed digits is 14";
         }
     })
@@ -40,16 +38,14 @@ clearButton.addEventListener("click", () => {
 let deleteButton = document.querySelector(".delete");
 
 deleteButton.addEventListener("click", () => {
-    if(hasSet === false)
-    {
+    if (hasSet === false) {
         if (value.textContent !== "0") {
             if (value.textContent.length === 1) {
                 value.textContent = "0";
-                hasSet=true;
+                hasSet = true;
             } else {
                 value.textContent = value.textContent.slice(0, value.textContent.length - 1);
-                if(!value.textContent.includes("."))
-                {
+                if (!value.textContent.includes(".")) {
                     hasDot = false;
                 }
             }
@@ -60,27 +56,24 @@ deleteButton.addEventListener("click", () => {
 let equalButton = document.querySelector(".equal");
 
 equalButton.addEventListener("click", () => {
-    if(hasSet && operatorToCalculate === null)
-    {
+    if (hasSet && operatorToCalculate === null) {
         return;
     }
-        operand2=value.textContent;
-        value.textContent = clearLastDot(value.textContent);
-        value.textContent = operate(operand1, value.textContent, operatorToCalculate);
-        
+    operand2 = value.textContent;
+    value.textContent = clearLastDot(value.textContent);
+    value.textContent = operate(operand1, value.textContent, operatorToCalculate);
 
-        operatorToCalculate = null;
-        hasSet = true;
-    }
-);
+
+    operatorToCalculate = null;
+    hasSet = true;
+});
 
 let operatorsButton = document.querySelectorAll(".operators");
 
 operatorsButton.forEach(
     (operator) => {
         operator.addEventListener("click", () => {
-            if (operatorToCalculate !== null)
-            {
+            if (operatorToCalculate !== null) {
                 equalButton.click();
             }
             value.textContent = clearLastDot(value.textContent);
@@ -94,14 +87,10 @@ operatorsButton.forEach(
 );
 
 
-function clearLastDot(operand1)
-{
-    if(operand1[operand1.length-1]===".")
-    {
-        return operand1.slice(0, operand1.length-1);
-    }
-    else
-    {
+function clearLastDot(operand1) {
+    if (operand1[operand1.length - 1] === ".") {
+        return operand1.slice(0, operand1.length - 1);
+    } else {
         return operand1.slice(0, operand1.length);
     }
 }
@@ -118,7 +107,7 @@ function operate(operand1, operand2, operator) {
                 result = copy.toExponential(start);
                 start++;
             }
-            hasSet=true;
+            hasSet = true;
         }
         return result;
     }
@@ -133,8 +122,7 @@ function operate(operand1, operand2, operator) {
         result = (parseFloat(operand1) * parseFloat(operand2));
         return parser(result);
     } else if (operator === "/") {
-        if(operand2==="0")
-        {
+        if (operand2 === "0") {
             message.textContent = "Error: Division by 0";
         }
         result = (parseFloat(operand1) / parseFloat(operand2));
@@ -144,16 +132,11 @@ function operate(operand1, operand2, operator) {
 
 let dotButton = document.querySelector(".dot");
 
-dotButton.addEventListener("click", () =>
-{
-    if(!hasDot)
-    {
-        if(value.textContent.length <= 13)
-        {
-            value.textContent+= ".";
-        }
-        else
-        {
+dotButton.addEventListener("click", () => {
+    if (!hasDot) {
+        if (value.textContent.length <= 13) {
+            value.textContent += ".";
+        } else {
             message.textContent = "Maximum number of allowed digits is 14";
         }
         hasDot = true;
@@ -163,26 +146,21 @@ dotButton.addEventListener("click", () =>
 
 signButton = document.querySelector(".sign");
 
-signButton.addEventListener("click", () =>
-{
-    if(isNeg)
-    {
-        value.textContent = value.textContent.slice(1, value.textContent.length);
-        isNeg = false;
-    }
-    else
-    {
-        if(value.textContent.length === 14)
-        {
-            message.textContent = "Maximum number of allowed symbols is 14";
-        }
-        else
-        {
-            if(value.textContent!=="0")
-            {
-                value.textContent = "-" + value.textContent;
-                isNeg = true;
+signButton.addEventListener("click", () => {
+    if (value.textContent !== "0") {
+        if (isNeg) {
+            value.textContent = value.textContent.slice(1, value.textContent.length);
+            isNeg = false;
+        } else {
+            if (value.textContent.length === 14) {
+                message.textContent = "Maximum number of allowed symbols is 14";
+            } else {
+                if (value.textContent !== "0") {
+                    value.textContent = "-" + value.textContent;
+                    isNeg = true;
+                }
             }
         }
     }
+
 });
